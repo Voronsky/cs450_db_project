@@ -58,7 +58,7 @@ public class CompanyDB {
 		return false;
 	}
 
-	public ArrayList projectList() throws SQLException {
+	public ArrayList<String> getProjectList() throws SQLException {
 		ArrayList<String> listOfProjects = new ArrayList<String>();
 		String query = "select pname from project";
 		String project = "";
@@ -70,7 +70,7 @@ public class CompanyDB {
 			listOfProjects.add(project);
 		}
 		/* Print out the list of projects to make sure things are right */
-		Iterator itr = listOfProjects.iterator();
+		Iterator<String> itr = listOfProjects.iterator();
 		while(itr.hasNext()) {
 			System.out.println(itr.next());
 		}
