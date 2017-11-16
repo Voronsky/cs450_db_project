@@ -13,9 +13,9 @@
       <ButtonBar layoutX="378.0" layoutY="230.0" prefHeight="40.0" prefWidth="200.0" />
       <TextField fx:id="ssn_input" layoutX="207.0" layoutY="99.0" promptText="Type SSN here" />
       <Label id="ssn_input_label" layoutX="237.0" layoutY="71.0" text="Please Enter SSN" />
-    <Button id="login_btn" fx:id="login_btn" layoutX="387.0" layoutY="99.0" mnemonicParsing="false" text="Login"  />
+    <Button id="login_btn" fx:id="login_btn" layoutX="387.0" layoutY="99.0" mnemonicParsing="false" text="Login" onAction="#getSSNInput"  />
       <TextArea editable="false" fx:id="db_output" layoutX="122.0" layoutY="229.0" prefHeight="141.0" prefWidth="339.0" promptText="DB output here..." />
-      <Button id="add_emp_btn" layoutX="236.0" layoutY="135.0" mnemonicParsing="false" text="Add Employee" />
+      <Button id="add_emp_btn" fx:id="add_emp_btn" layoutX="236.0" layoutY="135.0" mnemonicParsing="false" text="Add Employee" />
       <Label layoutX="130.0" layoutY="200.0" prefHeight="16.0" prefWidth="112.0" text="Database output" />
    </children>
 </AnchorPane>
