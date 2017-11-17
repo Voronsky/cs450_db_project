@@ -41,21 +41,23 @@ public class CompanyDB {
 	 */
 	public boolean isManager(String ssn) throws SQLException {
 		String query = "select * from department where mgrssn = ?";
-		String mgrSsn = null;
+		String mgrSsn = "";
 		p = conn.prepareStatement(query);
 		p.clearParameters();
 		p.setString(1,ssn);
 		r = p.executeQuery();
 		while(r.next()) {
 			mgrSsn = r.getString(1);
+			System.out.println("MGR SSN FOUND FOR FOLLOWING DEPARTMENT:");
 			System.out.println(mgrSsn);
 		}
-		if (mgrSsn == null) {
+		System.out.println(mgrSsn);
+		System.out.println(mgrSsn.length());
+		/*if(mgrSsn.length()==0) {
 			return false;
-		}
-		if (!mgrSsn.isEmpty())
-			return true;
-		return false;
+		}*/
+		return true;
+		
 	}
 
 	public ArrayList<String> getProjectList() throws SQLException {
