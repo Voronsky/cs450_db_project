@@ -18,7 +18,7 @@ public class Employee {
 	private String mgrSsn;
 	private int salary;
 	private int dno;
-	private ArrayList<String> assignedProjects;
+	private ArrayList<Pair> assignedProjects = new ArrayList<Pair>();
 
 
 	public Employee(String firstName, String minit, String lastName, String Address, String ssn, String birthDate,
@@ -46,12 +46,20 @@ public class Employee {
 		return this.minit;
 	}
 	
+	public String getSSN() {
+		return this.ssn;
+	}
+	
 	public String getAddress() {
 		return this.address;
 	}
 	
 	public String getBirthDate() {
 		return this.birthDate;
+	}
+	
+	public String getManagerSSN() {
+		return this.mgrSsn;
 	}
 	
 	public int getSalary() {
@@ -61,8 +69,12 @@ public class Employee {
 	public int getDepartmentNum() {
 		return this.dno;
 	}
+
+	public ArrayList<Pair> getAssignedProjects(){
+		return this.assignedProjects;
+	}
 	
-	public void assignProjects(ArrayList<String> listOfProjects) {
+	public void setAssignedProjects(ArrayList<Pair> listOfProjects) {
 		this.assignedProjects = listOfProjects;
 		
 	}
