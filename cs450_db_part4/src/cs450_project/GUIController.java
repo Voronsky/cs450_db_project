@@ -47,9 +47,8 @@ public class GUIController {
 				Parent root;
 				try {
 					System.out.println("-----INFO: Launching MgrScreen ----");
-					//launchManagerScreen(event);
-					result = getSSNInput();
-					System.out.println(result);
+					ssn = ssn_input.getText();
+					result = getSSNInput(ssn);
 					if(result == false) {
 						System.exit(1);
 					}
@@ -68,26 +67,22 @@ public class GUIController {
 	}
 	
 	@FXML
-	private boolean getSSNInput() {
-		ssn = ssn_input.getText();
+	private boolean getSSNInput(String ssn) {
+		String checkSsn = ssn;
 		try {
-			try {
-				CompanyDB company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
-				mgrCheck = company.isManager(ssn);
-				if (mgrCheck)
-					db_output.setText("Welcome to the Company Database");
-				else
-					System.out.println("Not a manager or SSN does not exist in DB");
-					return false;
-				///* Open a new window */
-				//launchManagerScreen(null);
+			CompanyDB company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
+			mgrCheck = company.isManager(checkSsn);
+			if (mgrCheck) {
+				db_output.setText("Welcome to the Company Database");
+				System.out.println("Not a manager or SSN does not exist in DB");
 			}
-			catch (SQLException se) {
-				db_output.setText("ERROR: Cannot connect to database");
+			else {
+				System.out.println("Not a manager or SSN does not exist in DB");
+				return false;
 			}
 		}
-		catch(IOException e) {
-			System.out.println(e);
+		catch (Exception se) {
+				db_output.setText("ERROR: Cannot connect to database");
 		}
 		return true;
 		
