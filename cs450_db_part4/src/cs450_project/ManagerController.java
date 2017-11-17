@@ -116,7 +116,7 @@ public class ManagerController {
 		add_emp_btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				insertIntoDB();
+				addEmployee();
 			}
 		});
 		
@@ -124,25 +124,38 @@ public class ManagerController {
 			@Override
 			public void handle(ActionEvent event) {
 				pair = new Pair();
+				int index = 0;
 				totalHours = 0.00;
-				pair.setHours(Double.parseDouble(pHours.getText()));
-				pair.setProject(projectsBox.getSelectionModel().getSelectedItem().toString());
+				try {
+					pair.setHours(Double.parseDouble(pHours.getText()));
+					pair.setProject(projectsBox.getSelectionModel().getSelectedItem().toString());
+				}
+				catch(Exception e){
+					alert.setHeaderText("Fatal Exception error");
+					alert.setContentText(e.toString());
+					alert.showAndWait();
+					System.exit(1);
+				}
 				System.out.println("---- INFO: Project Selected and Hours assigned ---");
 				System.out.println(pair.getProject()+"\t"+pair.getHours());
 				selectedProjects.add(pair);
-				for(int i=0; i<selectedProjects.size(); i++) {
-					projectPair = selectedProjects.get(i);
-					totalHours += projectPair.getHours();
-					if(totalHours > MAX_HOURS) {
+				if(exceedsMaxHours(selectedProjects)) {
 						selectedProjects.clear();
-						outputText = "";
 						alert.setHeaderText("More than max Hours allowed");
 						alert.setContentText("No more than a total of 40 hours can be assigned to an employee. Try again");
 						alert.showAndWait();
-					}
 				}
-				outputText = outputText + "\n" + "Assigned " + pair.getProject() + " to Employee\t Hours: " + pair.getHours();
-				output.setText(outputText);
+				else if(duplicateProjects(selectedProjects) > 0) {
+					index = duplicateProjects(selectedProjects);
+					selectedProjects.remove(index);
+					alert.setHeaderText("Duplicate Project");
+					alert.setContentText("Project selected has already been assigned.");
+					alert.showAndWait();
+				}
+				else {
+					outputText = outputText + "\n" + "Assigned " + pair.getProject() + " to Employee\t Hours: " + pair.getHours();
+					output.setText(outputText);
+				}
 
 			}
 		});
@@ -152,7 +165,7 @@ public class ManagerController {
 	}
 	
 	@FXML
-	protected void insertIntoDB() {
+	protected void addEmployee() {
 		missingValues = "";
 		try {
 			if(fname_input.getText().isEmpty()) {
@@ -193,13 +206,45 @@ public class ManagerController {
 				address_input.getText(), ssn_field.getText(),birth_date.getText(),
 				Integer.parseInt(salary_input.getText()),Integer.parseInt(dept_num.getText()));
 				employee.setAssignedProjects(selectedProjects);
-				System.out.println(employee);
+				employee.printDebugEmployeeeInfo();
 			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	/* Check to make sure total hours assigned to an employee <= 40 hours */
+	private boolean exceedsMaxHours(ArrayList<Pair> list) {
+				for(int i=0; i<list.size(); i++) {
+					projectPair = list.get(i);
+					totalHours += projectPair.getHours();
+					if(totalHours > MAX_HOURS) {
+						outputText = "";
+						return true;
+						
+					}
+				}
+		return false;
+	}
+	
+	/* Check for duplicate assigned projects, remove the duplicate entry */
+	private int duplicateProjects(ArrayList<Pair> list) {
+		Pair projectName = new Pair();
+		for (int i = 0; i < list.size(); i++) {
+			projectName = list.get(i);
+			for (int j=++i; j< list.size(); j++) {
+				projectPair = list.get(j);
+				System.out.println("projectName: "+projectName.getProject());
+				System.out.println("projectPair: "+projectPair.getProject());
+				if (projectName.getProject().equals(projectPair.getProject())) {
+					System.out.println("ERROR DUPLICATE PROJECT FOUND");
+					return j;
+				}
+			}
+		}
+		return 0;
 	}
 
 
