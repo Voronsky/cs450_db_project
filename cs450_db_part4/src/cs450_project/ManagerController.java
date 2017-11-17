@@ -74,7 +74,6 @@ public class ManagerController {
 	Pair projectPair;
 	private static final double MAX_HOURS = 40.00;
 	private ArrayList<String> listOfProjects;
-	//private ArrayList<Pair<String, Double>> selectedProjects = new ArrayList<Pair<String, Double>>();
 	private ArrayList<Pair> selectedProjects = new ArrayList<Pair>();
 	private ArrayList<String> missingFields = new ArrayList<String>();
 	private ObservableList<String> projectList = FXCollections.observableArrayList();
@@ -89,7 +88,6 @@ public class ManagerController {
 		int listSize = 0;
 		try {
 			
-			//project_name_col.setCellFactory(new PropertyValueFactory<Project, String>("Test"));
 			alert.setTitle("Employee Creation Error");
 			alert.setHeaderText("Attention Required!");
 			company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
@@ -113,6 +111,9 @@ public class ManagerController {
 			System.exit(1);
 		}
 		
+		/**
+		 * Handles when the employee is to be added
+		 */
 		add_emp_btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -120,6 +121,9 @@ public class ManagerController {
 			}
 		});
 		
+		/**
+		 * Creates a list of Pairs which contain (Project, Hours)
+		 */
 		assignProject.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -164,6 +168,10 @@ public class ManagerController {
 		
 	}
 	
+	/**
+	 * Creates an Employee object and fills in the object attributes to that of the input
+	 * Then it will try to insert into the database directly
+	 */
 	@FXML
 	protected void addEmployee() {
 		missingValues = "";
@@ -215,7 +223,11 @@ public class ManagerController {
 		
 	}
 	
-	/* Check to make sure total hours assigned to an employee <= 40 hours */
+	/**
+	 * Checks to make sure total hours assigned to an employee <= 40 hours
+	 * @param list
+	 * @return
+	 */
 	private boolean exceedsMaxHours(ArrayList<Pair> list) {
 				for(int i=0; i<list.size(); i++) {
 					projectPair = list.get(i);
@@ -229,7 +241,11 @@ public class ManagerController {
 		return false;
 	}
 	
-	/* Check for duplicate assigned projects, remove the duplicate entry */
+	/**
+	 * Check for duplicate assigned projects,
+	 * @param list
+	 * @return
+	 */
 	private int duplicateProjects(ArrayList<Pair> list) {
 		Pair projectName = new Pair();
 		for (int i = 0; i < list.size(); i++) {
