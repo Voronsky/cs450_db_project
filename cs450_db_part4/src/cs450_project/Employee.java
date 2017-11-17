@@ -13,6 +13,7 @@ public class Employee {
 	private String fname;
 	private String minit;
 	private String lname;
+	private String sex;
 	private String address;
 	private String birthDate;
 	private String ssn;
@@ -22,11 +23,13 @@ public class Employee {
 	private ArrayList<Pair> assignedProjects = new ArrayList<Pair>();
 
 
-	public Employee(String firstName, String minit, String lastName, String Address, String ssn, String birthDate,
+	public Employee(String firstName, String minit, String lastName, String sex, String Address, String ssn, String mgrSsn, String birthDate,
 			int salary, int dno) {
 		this.fname = firstName;
 		this.minit = minit;
 		this.lname = lastName;
+		this.sex = sex;
+		this.mgrSsn = mgrSsn;
 		this.address = Address;
 		this.ssn = ssn;
 		this.birthDate = birthDate;
@@ -47,6 +50,10 @@ public class Employee {
 		return this.minit;
 	}
 	
+	public String getLastName() {
+		return this.lname;
+	}
+	
 	public String getSSN() {
 		return this.ssn;
 	}
@@ -57,6 +64,10 @@ public class Employee {
 	
 	public String getBirthDate() {
 		return this.birthDate;
+	}
+	
+	public String getSex() {
+		return this.sex;
 	}
 	
 	public String getManagerSSN() {
@@ -91,12 +102,14 @@ public class Employee {
 		ArrayList<Pair> debug = new ArrayList<Pair>();
 		Pair debugPair = new Pair();
 		System.out.println("---EMPLOYEE OBJECT " + this + " -----");
-		System.out.println(this.getEmployeeName());
-		System.out.println(this.getAddress());
-		System.out.println(this.getSSN());
-		System.out.println(this.getBirthDate());
-		System.out.println(this.getSalary());
-		System.out.println(this.getDepartmentNum());
+		System.out.println("Employee Name: "+this.getEmployeeName());
+		System.out.println("Sex: "+this.getSex());
+		System.out.println("Address: "+this.getAddress());
+		System.out.println("Employee SSN: "+this.getSSN());
+		System.out.println("Manager SSN: "+this.getManagerSSN());
+		System.out.println("Employee Birth date: "+this.getBirthDate());
+		System.out.println("Employee Salary: "+this.getSalary());
+		System.out.println("Employee Department Number: "+this.getDepartmentNum());
 		debug = this.getAssignedProjects();
 		for(int i = 0 ; i < debug.size(); i++) {
 			debugPair = debug.get(i);

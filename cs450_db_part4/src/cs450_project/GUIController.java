@@ -2,10 +2,13 @@
  * 
  */
 package cs450_project;
+import javafx.collections.ObservableList;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.control.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
@@ -27,19 +30,10 @@ public class GUIController {
 	Button add_emp_btn;
 	private String ssn;
 	private boolean mgrCheck;
+	private AnchorPane pane;
 	
 	@FXML
 	protected void initialize() {
-		/*login_btn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event)  {
-				getSSNInput();
-				System.out.println("-----INFO: Launching MgrScreen ----");
-				launchManagerScreen(event);
-				
-			}
-		});*/
-		
 		login_btn.setOnAction(new EventHandler<ActionEvent>() {
 			Boolean result;
 			@Override
@@ -57,6 +51,7 @@ public class GUIController {
 					Stage stage = new Stage();
 					stage.setTitle("Manager Screen");
 					stage.setScene(new Scene(root, 800, 600));
+					
 					stage.show();
 				}
 				catch(Exception e) {
@@ -64,6 +59,15 @@ public class GUIController {
 				}
 			}
 		});
+	}
+	
+	public String getManagerSSN() {
+		return this.ssn;
+	}
+	
+	public void setManagerSSN(String ssn) {
+		this.ssn = ssn;
+		
 	}
 	
 	@FXML
@@ -74,7 +78,7 @@ public class GUIController {
 			mgrCheck = company.isManager(checkSsn);
 			if (mgrCheck) {
 				db_output.setText("Welcome to the Company Database");
-				System.out.println("Not a manager or SSN does not exist in DB");
+				this.setManagerSSN(ssn);
 			}
 			else {
 				System.out.println("Not a manager or SSN does not exist in DB");

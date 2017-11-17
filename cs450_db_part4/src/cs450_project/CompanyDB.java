@@ -60,6 +60,12 @@ public class CompanyDB {
 		
 	}
 
+	/**
+	 * Queries the SQL Database, and grabs a view of the current projects in 
+	 * the PROJECT table.
+	 * @return the listOfProjects
+	 * @throws SQLException
+	 */
 	public ArrayList<String> getProjectList() throws SQLException {
 		ArrayList<String> listOfProjects = new ArrayList<String>();
 		String query = "select pname from project";
@@ -80,4 +86,23 @@ public class CompanyDB {
 
 	}
 
+	public void insertIntoEmployeeTable(Employee e) throws SQLException {
+		String query = "insert INTO (fname,minit,lname,ssn,bdate,address,sex,salary,superssn,dno)"
+				+ " VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+		p = conn.prepareStatement(query);
+		p.clearParameters();
+		p.setString(1, e.getFirstName());
+		p.setString(2, e.getMinit());
+		p.setString(3, e.getLastName());
+		p.setString(4, e.getSSN());
+		p.setString(5, e.getBirthDate());
+		p.setString(6, e.getAddress());
+		p.setString(7, e.getSex());
+		p.setString(8, Integer.toString(e.getSalary()));
+		p.setString(9, e.getManagerSSN());
+		p.setString(10, Integer.toString(e.getDepartmentNum()));
+		r = p.executeQuery();
+		
+	}
 }

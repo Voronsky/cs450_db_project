@@ -59,6 +59,9 @@ public class ManagerController {
 	private TextField salary_input;
 	
 	@FXML
+	private TextField sex_input;
+	
+	@FXML
 	private TextArea output;
 
 	
@@ -81,6 +84,7 @@ public class ManagerController {
 	private double totalHours = 0;
 	private String missingValues = "";
 	private String outputText = "";
+	GUIController loginGui = new GUIController();
 	
 	
 	@FXML
@@ -205,13 +209,17 @@ public class ManagerController {
 				missingValues = missingValues + "\nMissing Department Values";
 			}
 			
+			if(sex_input.getText().isEmpty()){
+				missingValues = missingValues + "\nMissing Sex";
+			}
+			
 			if(missingValues.length()>0) {
 				alert.setContentText(missingValues);
 				alert.showAndWait();
 			}
 			else {
 				employee = new Employee(fname_input.getText(),minit_input.getText(),lname_input.getText(),
-				address_input.getText(), ssn_field.getText(),birth_date.getText(),
+				sex_input.getText(),address_input.getText(), ssn_field.getText(), "", birth_date.getText(),
 				Integer.parseInt(salary_input.getText()),Integer.parseInt(dept_num.getText()));
 				employee.setAssignedProjects(selectedProjects);
 				employee.printDebugEmployeeeInfo();
