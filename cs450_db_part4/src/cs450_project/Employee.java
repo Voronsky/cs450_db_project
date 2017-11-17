@@ -6,7 +6,8 @@ import java.util.*;
 
 /**
  * @author ivan
- *
+ * This class is an object containing every attribute that defines the entity relationship
+ * of an employee. This information  pertains to the EMPLOYEE TABLE in our current DB
  */
 public class Employee {
 	private String fname;
@@ -83,6 +84,9 @@ public class Employee {
 		this.mgrSsn = mgrssn;
 	}
 	
+	/**
+	 * Debug purposes only, print all the contents of the object
+	 */
 	public void printDebugEmployeeeInfo() {
 		ArrayList<Pair> debug = new ArrayList<Pair>();
 		Pair debugPair = new Pair();

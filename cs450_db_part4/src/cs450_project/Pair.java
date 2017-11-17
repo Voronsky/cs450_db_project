@@ -5,7 +5,8 @@ package cs450_project;
 
 /**
  * @author ivan
- *
+ * A class of Pairs, this is a custom class where each pair specifically is used in manner
+ * of (Project, Hours)
  */
 public class Pair {
 		private String project;
