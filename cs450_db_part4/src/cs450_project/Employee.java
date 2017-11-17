@@ -83,4 +83,23 @@ public class Employee {
 		this.mgrSsn = mgrssn;
 	}
 	
+	public void printDebugEmployeeeInfo() {
+		ArrayList<Pair> debug = new ArrayList<Pair>();
+		Pair debugPair = new Pair();
+		System.out.println("---EMPLOYEE OBJECT " + this + " -----");
+		System.out.println(this.getEmployeeName());
+		System.out.println(this.getAddress());
+		System.out.println(this.getSSN());
+		System.out.println(this.getBirthDate());
+		System.out.println(this.getSalary());
+		System.out.println(this.getDepartmentNum());
+		debug = this.getAssignedProjects();
+		for(int i = 0 ; i < debug.size(); i++) {
+			debugPair = debug.get(i);
+			System.out.println(debugPair.getProject()+"\t"+debugPair.getHours());
+		}
+		System.out.println("----END OF EMPLOYEE " + this + "DEBUG ------");
+		
+	}
+	
 }
