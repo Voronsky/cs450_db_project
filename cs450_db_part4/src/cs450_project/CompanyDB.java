@@ -100,9 +100,10 @@ public class CompanyDB {
 		p.setString(6, e.getAddress());
 		p.setString(7, e.getSex());
 		p.setString(8, Integer.toString(e.getSalary()));
-		p.setString(9, e.getManagerSSN());
+		p.setString(9, e.getSupervisorSSN());
 		p.setString(10, Integer.toString(e.getDepartmentNum()));
 		r = p.executeQuery();
+		System.out.println(r);
 		
 	}
 }
