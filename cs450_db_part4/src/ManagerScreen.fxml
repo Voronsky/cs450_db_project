@@ -9,42 +9,51 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs450_project.ManagerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="741.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs450_project.ManagerController">
    <children>
       <Label layoutX="29.0" layoutY="53.0" text="First Name" />
-      <TextField id="first_name" fx:id="fname_input" layoutX="118.0" layoutY="48.0" promptText="Enter First Name" />
-      <Label layoutX="307.0" layoutY="53.0" text="Middle Initial" />
+      <TextField id="first_name" fx:id="fname_input" layoutX="118.0" layoutY="48.0" prefHeight="26.0" prefWidth="129.0" promptText="Enter First Name" />
+      <Label layoutX="30.0" layoutY="136.0" text="Middle Initial" />
       <Label layoutX="29.0" layoutY="96.0" text="Last Name" />
-      <TextField id="last_name" fx:id="lname_input" layoutX="118.0" layoutY="91.0" promptText="Enter Last Name" />
-      <Label layoutX="307.0" layoutY="96.0" text="Address" />
-      <TextField id="middle_initial" fx:id="minit_input" layoutX="401.0" layoutY="48.0" promptText="Enter Middle Initial" />
-      <Label layoutX="29.0" layoutY="144.0" text="SSN" />
-      <Label layoutX="307.0" layoutY="136.0" text="Birth Date" />
-      <TextField id="ssn_field" fx:id="ssn_field" layoutX="118.0" layoutY="131.0" promptText="xxx-xx-xxxx" />
-      <TextField id="birth_date" fx:id="birth_date" layoutX="401.0" layoutY="131.0" promptText="mm/dd/yyyy" />
-      <TextField id="address_input" fx:id="address_input" layoutX="401.0" layoutY="91.0" promptText="Enter Address" />
+      <TextField id="last_name" fx:id="lname_input" layoutX="118.0" layoutY="91.0" prefHeight="26.0" prefWidth="129.0" promptText="Enter Last Name" />
+      <Label layoutX="309.0" layoutY="48.0" text="Address" />
+      <TextField id="middle_initial" fx:id="minit_input" layoutX="173.0" layoutY="131.0" prefHeight="26.0" prefWidth="41.0" promptText="Enter Middle Initial" />
+      <Label layoutX="311.0" layoutY="168.0" text="SSN" />
+      <Label layoutX="309.0" layoutY="88.0" text="Birth Date" />
+      <TextField id="ssn_field" fx:id="ssn_field" layoutX="407.0" layoutY="163.0" prefHeight="26.0" prefWidth="129.0" promptText="xxx-xx-xxxx" />
+      <TextField id="birth_date" fx:id="birth_date" layoutX="403.0" layoutY="83.0" prefHeight="26.0" prefWidth="136.0" promptText="mm/dd/yyyy" />
+      <TextField id="address_input" fx:id="address_input" layoutX="403.0" layoutY="43.0" promptText="Enter Address" />
       <Label layoutX="29.0" layoutY="176.0" text="Department Number" />
       <TextField id="dept_num" fx:id="dept_num" layoutX="173.0" layoutY="171.0" prefHeight="26.0" prefWidth="53.0" promptText="Num" />
-      <CheckBox fx:id="dep_no" layoutX="420.0" layoutY="237.0" mnemonicParsing="false" text="No" />
-      <Label layoutX="307.0" layoutY="238.0" text="Dependents?" />
-      <CheckBox fx:id="dep_yes" layoutX="479.0" layoutY="237.0" mnemonicParsing="false" text="Yes" />
-      <Label layoutX="307.0" layoutY="282.0" text="Dependent First Name" />
-      <TextField id="fx:dep_first_name" fx:id="dep_first_name" editable="false" layoutX="467.0" layoutY="277.0" promptText="Enter First Name" />
-      <TextArea fx:id="output" layoutX="18.0" layoutY="378.0" prefHeight="138.0" prefWidth="430.0" />
-      <Button fx:id="add_emp_btn" layoutX="22.0" layoutY="336.0" mnemonicParsing="false" text="Add Employee" />
+      <CheckBox fx:id="dep_no" layoutX="422.0" layoutY="289.0" mnemonicParsing="false" selected="true" text="No" />
+      <Label layoutX="309.0" layoutY="290.0" text="Dependents?" />
+      <CheckBox fx:id="dep_yes" layoutX="481.0" layoutY="289.0" mnemonicParsing="false" text="Yes" />
+      <Label layoutX="309.0" layoutY="328.0" text="Dependent First Name" />
+      <TextField id="fx:dep_first_name" fx:id="dep_first_name" editable="false" layoutX="462.0" layoutY="323.0" prefHeight="26.0" prefWidth="136.0" promptText="Enter First Name" />
+      <TextArea fx:id="output" layoutX="15.0" layoutY="420.0" prefHeight="147.0" prefWidth="430.0" />
+      <Button fx:id="add_emp_btn" layoutX="16.0" layoutY="382.0" mnemonicParsing="false" text="Add Employee" />
       <Label layoutX="214.0" layoutY="14.0" text="Employee Information Entry">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
       <Label layoutX="29.0" layoutY="204.0" text="Assign Project:" />
-      <TextField fx:id="pHours" layoutX="221.0" layoutY="233.0" prefHeight="26.0" prefWidth="53.0" promptText="Hours" />
+      <TextField fx:id="pHours" layoutX="221.0" layoutY="220.0" prefHeight="26.0" prefWidth="53.0" promptText="Hours" />
       <Label layoutX="228.0" layoutY="204.0" text="Hours" />
-      <Button fx:id="assignProject" layoutX="25.0" layoutY="277.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="223.0" text="Assign Project to Employee" />
-      <ComboBox fx:id="projectsBox" layoutX="25.0" layoutY="233.0" prefHeight="26.0" prefWidth="182.0" promptText="Projects" />
-      <Label layoutX="309.0" layoutY="204.0" text="Salary" />
-      <TextField fx:id="salary_input" layoutX="403.0" layoutY="199.0" promptText="Enter Salary" />
-      <Label layoutX="307.0" layoutY="176.0" text="Sex" />
-      <TextField fx:id="sex_input" layoutX="401.0" layoutY="171.0" prefHeight="26.0" prefWidth="53.0" promptText="Sex" />
+      <Button fx:id="assignProject" layoutX="33.0" layoutY="276.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="129.0" text="Assign Project" />
+      <ComboBox fx:id="projectsBox" layoutX="28.0" layoutY="220.0" prefHeight="26.0" prefWidth="182.0" promptText="Projects" />
+      <Label layoutX="311.0" layoutY="256.0" text="Salary" />
+      <TextField fx:id="salary_input" layoutX="405.0" layoutY="251.0" prefHeight="26.0" prefWidth="112.0" promptText="Enter Salary" />
+      <Label layoutX="309.0" layoutY="128.0" text="Sex" />
+      <TextField fx:id="sex_input" layoutX="403.0" layoutY="123.0" prefHeight="26.0" prefWidth="53.0" promptText="Sex" />
+      <Label layoutX="307.0" layoutY="212.0" text="Supervisor SSN" />
+      <TextField fx:id="superssn_input" layoutX="419.0" layoutY="207.0" prefHeight="26.0" prefWidth="112.0" promptText="xxx-xxx-xxxx" />
+      <Label layoutX="621.0" layoutY="328.0" text="Sex" />
+      <TextField fx:id="dep_sex" editable="false" layoutX="659.0" layoutY="323.0" prefHeight="26.0" prefWidth="47.0" promptText="Sex" />
+      <Label layoutX="309.0" layoutY="361.0" text="Birth Date" />
+      <TextField fx:id="dep_bdate" editable="false" layoutX="387.0" layoutY="356.0" prefHeight="26.0" prefWidth="97.0" promptText="mm/dd/yyyy" />
+      <Label layoutX="487.0" layoutY="361.0" text="Relationship" />
+      <TextField fx:id="dep_relationship" editable="false" layoutX="571.0" layoutY="356.0" prefHeight="26.0" prefWidth="136.0" promptText="Enter Relationship" />
+      <Button fx:id="add_dep_btn" layoutX="486.0" layoutY="395.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Add Depednent" />
    </children>
 </AnchorPane>
