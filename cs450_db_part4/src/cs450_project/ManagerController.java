@@ -6,6 +6,8 @@ import javafx.event.*;
 import javafx.fxml.*;
 import javafx.beans.*;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.*;
 import javafx.scene.control.TextArea;
@@ -47,6 +49,9 @@ public class ManagerController {
 	private TextField ssn_field;
 	
 	@FXML
+	private TextField superssn_input;
+	
+	@FXML
 	private TextField birth_date;
 	
 	@FXML
@@ -63,13 +68,30 @@ public class ManagerController {
 	
 	@FXML
 	private TextArea output;
-
+	
+	@FXML
+	private CheckBox dep_yes;
+	
+	@FXML
+	private CheckBox dep_no;
+	
+	@FXML
+	private TextField dep_sex;
+	
+	@FXML
+	private TextField dep_bdate;
+	
+	@FXML
+	private TextField dep_relationship;
 	
 	@FXML
 	private Button add_emp_btn;
 	
 	@FXML
 	private Button assignProject;
+	
+	@FXML
+	private Button add_dep_btn;
 
 	CompanyDB company;
 	Employee employee;
@@ -92,8 +114,9 @@ public class ManagerController {
 		int listSize = 0;
 		try {
 			
-			alert.setTitle("Employee Creation Error");
-			alert.setHeaderText("Attention Required!");
+			//alert.setTitle("Employee Creation Error");
+			//alert.setHeaderText("Attention Required!");
+			employee = new Employee();
 			company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
 			listOfProjects = company.getProjectList();
 			System.out.println("---List of Projects --- ");
@@ -103,7 +126,7 @@ public class ManagerController {
 			for (int i = 0; i < listSize; i++) {
 				projectList.add(listOfProjects.get(i));
 			}
-			System.out.println("---INfO ProjectList -----");
+			System.out.println("---INFO ProjectList -----");
 			for (int i = 0; i < projectList.size(); i++) {
 				System.out.println(projectList.get(i));
 			}
@@ -168,7 +191,43 @@ public class ManagerController {
 			}
 		});
 		
-	
+		dep_yes.selectedProperty().addListener(new ChangeListener<Boolean>(){
+			public void changed(ObservableValue<? extends Boolean> ov, 
+					Boolean old_val, Boolean new_val) {
+				System.out.println(new_val);
+				if(new_val) {
+					dep_first_name.setEditable(true);
+					dep_sex.setEditable(true);
+					dep_bdate.setEditable(true);
+					dep_relationship.setEditable(true);
+				}
+				else {
+					dep_first_name.setEditable(false);
+					dep_sex.setEditable(false);
+					dep_bdate.setEditable(false);
+					dep_relationship.setEditable(false);
+				}
+			}
+		});
+		
+		add_dep_btn.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				employee.setDependents(dep_first_name.getText(),
+						dep_sex.getText(), 
+						dep_bdate.getText(), 
+						dep_relationship.getText()
+						);
+				outputText = outputText + "\nAdded Dependent\n" + dep_first_name.getText()
+				+ " "+ dep_sex.getText()+ " "+dep_bdate.getText()+ " "+dep_relationship.getText();
+				output.setText(outputText);
+				dep_first_name.clear();
+				dep_sex.clear();
+				dep_bdate.clear();
+				dep_relationship.clear();
+			}
+		});
+		
 		
 	}
 	
@@ -195,6 +254,9 @@ public class ManagerController {
 			if(ssn_field.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing SSN";
 			}
+			if(superssn_input.getText().isEmpty()) {
+				missingValues = missingValues + "\nMissing Supervisor SSN";
+			}
 			if(birth_date.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing Birth date";
 			}
@@ -213,16 +275,30 @@ public class ManagerController {
 				missingValues = missingValues + "\nMissing Sex";
 			}
 			
+			if(!dep_yes.isSelected() && !dep_no.isSelected()
+					|| dep_yes.isSelected() && dep_no.isSelected()) {
+				missingValues = missingValues + "\nIndicate has Dependents or not";
+			}
+			
 			if(missingValues.length()>0) {
 				alert.setContentText(missingValues);
 				alert.showAndWait();
 			}
 			else {
-				employee = new Employee(fname_input.getText(),minit_input.getText(),lname_input.getText(),
-				sex_input.getText(),address_input.getText(), ssn_field.getText(), "", birth_date.getText(),
-				Integer.parseInt(salary_input.getText()),Integer.parseInt(dept_num.getText()));
+
+				employee.setFirstName(fname_input.getText());
+				employee.setLastName(lname_input.getText());
+				employee.setMiddleInitial(minit_input.getText());
+				employee.setAddress(address_input.getText());
+				employee.setBirthDate(birth_date.getText());
+				employee.setSex(sex_input.getText());
+				employee.setSSN(ssn_field.getText());
+				employee.setSupervisorSSN(superssn_input.getText());
+				employee.setSalary(Integer.parseInt(salary_input.getText()));
+				employee.setDepartmentNumber(Integer.parseInt(dept_num.getText()));
 				employee.setAssignedProjects(selectedProjects);
 				employee.printDebugEmployeeeInfo();
+				//company.insertIntoEmployeeTable(employee);
 			}
 		}
 		catch(Exception e) {
