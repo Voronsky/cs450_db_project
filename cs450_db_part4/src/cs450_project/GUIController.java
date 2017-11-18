@@ -61,15 +61,6 @@ public class GUIController {
 		});
 	}
 	
-	public String getManagerSSN() {
-		return this.ssn;
-	}
-	
-	public void setManagerSSN(String ssn) {
-		this.ssn = ssn;
-		
-	}
-	
 	@FXML
 	private boolean getSSNInput(String ssn) {
 		String checkSsn = ssn;
@@ -78,7 +69,6 @@ public class GUIController {
 			mgrCheck = company.isManager(checkSsn);
 			if (mgrCheck) {
 				db_output.setText("Welcome to the Company Database");
-				this.setManagerSSN(ssn);
 			}
 			else {
 				System.out.println("Not a manager or SSN does not exist in DB");
