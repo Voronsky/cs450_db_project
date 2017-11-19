@@ -191,17 +191,17 @@ public class Employee {
 		
 	}
 	
-	private class Dependent {
+	public class Dependent {
 		private String name;
 		private String sex;
 		private String bdate;
 		private String relationship;
 		
-		private Dependent() {
+		public Dependent() {
 			
 		}
 		
-		private Dependent( String name, String sex, 
+		public Dependent( String name, String sex, 
 				String bdate, String relationship) 
 		{
 			this.name = name;
@@ -210,19 +210,19 @@ public class Employee {
 			this.relationship = relationship;
 		}
 		
-		private String getName() {
+		public String getName() {
 			return this.name;
 		}
 		
-		private String getSex() {
+		public String getSex() {
 			return this.sex;
 		}
 		
-		private String getBirthDate() {
+		public String getBirthDate() {
 			return this.bdate;
 		}
 		
-		private String getRelationship() {
+		public String getRelationship() {
 			return this.relationship;
 		}
 		
