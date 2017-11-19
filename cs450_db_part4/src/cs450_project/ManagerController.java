@@ -303,6 +303,8 @@ public class ManagerController {
 				clearScreen();
 				company.insertIntoEmployeeTable(employee);
 				System.out.println("Inserting EMployee Succeeded!");
+				company.insertIntoWorksOn(employee);
+				System.out.println("Inserting into Works on succeeded");
 				cleanUp();
 				employee.printDebugEmployeeeInfo();
 				//company.insertIntoWorksOn(employee);
