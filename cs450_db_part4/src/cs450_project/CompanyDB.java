@@ -180,7 +180,6 @@ public class CompanyDB {
 		String pName = null;
 		BigDecimal pno;
 		BigDecimal hours;
-		//String pnoQuery = "select pno from project where pname = ?";
 		String insertQuery = "insert INTO works_on(essn,pno,hours) values(?,?,?)";
 		for(int i = 0; i<e.getAssignedProjects().size();i++) {
 			pName = e.getProjectName(i);
