@@ -96,6 +96,18 @@ public class Employee {
 		return this.deps;
 	}
 	
+	public String getProjectName(int index) {
+		Pair project = new Pair();
+		project = assignedProjects.get(index);
+		return project.getProject();
+	}
+	
+	public double getProjectHours(int index) {
+		Pair project = new Pair();
+		project = assignedProjects.get(index);
+		return project.getHours();
+	}
+	
 	public void setFirstName(String fname) {
 		this.fname = fname;
 	}
