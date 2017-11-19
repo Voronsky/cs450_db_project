@@ -175,7 +175,7 @@ public class CompanyDB {
 	 * @throws SQLException
 	 */
 	public void insertIntoWorksOn(Employee e) throws SQLException {
-		System.out.println("ENTERED INSERTWORKS ON TABLE");
+		System.out.println("ENTERED INSERT WORKS_ON TABLE");
 		ArrayList<ProjectPair> numOfProjects = new ArrayList<ProjectPair>();
 		String pName = null;
 		BigDecimal pno;
@@ -209,6 +209,29 @@ public class CompanyDB {
 			p.setBigDecimal(3, numOfProjects.get(i).getHours());
 			p.executeUpdate();
 		}
+	}
+	
+	private void insertIntoDependents(Employee e) throws SQLException {
+		System.out.println("ENTERED DEPENDENTS TABLE");
+		ArrayList<Employee.Dependent> dependentList;
+		Employee.Dependent dependent;
+		String query = "insert into DEPENDENT(essn,dependent_name,sex,bdate,relationship)"
+				+"values(?,?,?,?,?)";
+		dependentList = e.getDepedent();
+		for(int i = 0; i<dependentList.size();i++) {
+			dependent = dependentList.get(i);
+			p = conn.prepareStatement(query);
+			p.clearParameters();
+			p.setString(1, e.getSSN());
+			p.setString(2, dependent.getName());
+			p.setString(3, dependent.getSex());
+			p.setDate(4, null);
+			p.setString(5,dependent.getRelationship());
+			p.executeUpdate();
+			
+		}
+
+
 	}
 	
 	
