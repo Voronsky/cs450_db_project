@@ -20,8 +20,8 @@
       <TextField id="middle_initial" fx:id="minit_input" layoutX="173.0" layoutY="131.0" prefHeight="26.0" prefWidth="41.0" promptText="Enter Middle Initial" />
       <Label layoutX="311.0" layoutY="168.0" text="SSN" />
       <Label layoutX="309.0" layoutY="88.0" text="Birth Date" />
-      <TextField id="ssn_field" fx:id="ssn_field" layoutX="407.0" layoutY="163.0" prefHeight="26.0" prefWidth="129.0" promptText="xxx-xx-xxxx" />
-      <TextField id="birth_date" fx:id="birth_date" layoutX="403.0" layoutY="83.0" prefHeight="26.0" prefWidth="136.0" promptText="mm/dd/yyyy" />
+      <TextField id="ssn_field" fx:id="ssn_field" layoutX="407.0" layoutY="163.0" prefHeight="26.0" prefWidth="129.0" promptText="xxxxxxxxx" />
+      <TextField id="birth_date" fx:id="birth_date" layoutX="403.0" layoutY="83.0" prefHeight="26.0" prefWidth="136.0" promptText="dd-mm-year" />
       <TextField id="address_input" fx:id="address_input" layoutX="403.0" layoutY="43.0" promptText="Enter Address" />
       <Label layoutX="29.0" layoutY="176.0" text="Department Number" />
       <TextField id="dept_num" fx:id="dept_num" layoutX="173.0" layoutY="171.0" prefHeight="26.0" prefWidth="53.0" promptText="Num" />
@@ -47,11 +47,11 @@
       <Label layoutX="309.0" layoutY="128.0" text="Sex" />
       <TextField fx:id="sex_input" layoutX="403.0" layoutY="123.0" prefHeight="26.0" prefWidth="53.0" promptText="Sex" />
       <Label layoutX="307.0" layoutY="212.0" text="Supervisor SSN" />
-      <TextField fx:id="superssn_input" layoutX="419.0" layoutY="207.0" prefHeight="26.0" prefWidth="112.0" promptText="xxx-xxx-xxxx" />
+      <TextField fx:id="superssn_input" layoutX="419.0" layoutY="207.0" prefHeight="26.0" prefWidth="112.0" promptText="xxxxxxxxx" />
       <Label layoutX="621.0" layoutY="328.0" text="Sex" />
       <TextField fx:id="dep_sex" editable="false" layoutX="659.0" layoutY="323.0" prefHeight="26.0" prefWidth="47.0" promptText="Sex" />
       <Label layoutX="309.0" layoutY="361.0" text="Birth Date" />
-      <TextField fx:id="dep_bdate" editable="false" layoutX="387.0" layoutY="356.0" prefHeight="26.0" prefWidth="97.0" promptText="mm/dd/yyyy" />
+      <TextField fx:id="dep_bdate" editable="false" layoutX="387.0" layoutY="356.0" prefHeight="26.0" prefWidth="97.0" promptText="yyyy-mm-dd" />
       <Label layoutX="487.0" layoutY="361.0" text="Relationship" />
       <TextField fx:id="dep_relationship" editable="false" layoutX="571.0" layoutY="356.0" prefHeight="26.0" prefWidth="136.0" promptText="Enter Relationship" />
       <Button fx:id="add_dep_btn" layoutX="486.0" layoutY="395.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Add Depednent" />
