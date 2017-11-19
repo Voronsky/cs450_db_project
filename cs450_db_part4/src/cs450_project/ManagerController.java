@@ -286,6 +286,7 @@ public class ManagerController {
 			}
 			else {
 
+				System.out.println("----DEBUG ATTEMPT TO ADD EMPLOYEE ---");
 				employee.setFirstName(fname_input.getText());
 				employee.setLastName(lname_input.getText());
 				employee.setMiddleInitial(minit_input.getText());
@@ -298,7 +299,13 @@ public class ManagerController {
 				employee.setDepartmentNumber(Integer.parseInt(dept_num.getText()));
 				employee.setAssignedProjects(selectedProjects);
 				employee.printDebugEmployeeeInfo();
-				//company.insertIntoEmployeeTable(employee);
+				System.out.println("------------------------------------");
+				clearScreen();
+				company.insertIntoEmployeeTable(employee);
+				System.out.println("Inserting EMployee Succeeded!");
+				cleanUp();
+				employee.printDebugEmployeeeInfo();
+				//company.insertIntoWorksOn(employee);
 			}
 		}
 		catch(Exception e) {
@@ -345,6 +352,29 @@ public class ManagerController {
 			}
 		}
 		return 0;
+	}
+	
+	/**
+	 * Clears out the GUI inputs
+	 */
+	private void clearScreen() {
+		fname_input.clear();
+		lname_input.clear();
+		address_input.clear();
+		pHours.clear();
+		minit_input.clear();
+		ssn_field.clear();
+		superssn_input.clear();
+		birth_date.clear();
+		dept_num.clear();
+		salary_input.clear();
+		sex_input.clear();
+	}
+	
+	private void cleanUp() {
+		employee = new Employee();
+		listOfProjects.clear();
+		outputText = "";
 	}
 
 
