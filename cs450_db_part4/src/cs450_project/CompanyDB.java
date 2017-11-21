@@ -98,6 +98,12 @@ public class CompanyDB {
 
 	}
 	
+	/**
+	 * Grabs the Project Number from the given Project Name from the Database
+	 * @param pName
+	 * @return pno corresponding to the Project
+	 * @throws SQLException
+	 */
 	public BigDecimal getProjectNumber(String pName) throws SQLException {
 		String query = "select pnumber from project where pname = ?";
 		BigDecimal pno = null;
@@ -111,6 +117,74 @@ public class CompanyDB {
 		}
 		return pno;
 		
+	}
+	
+	/**
+	 * Get the department number corresponding to the project name
+	 * @param pname
+	 * @return dno - the project's corresponding department number
+	 * @throws SQLException
+	 */
+	public int getDepartmentNumber(String pname) throws SQLException {
+
+		int dno = 0;
+		String query = "select dnum from project where pname = ?";
+		p = conn.prepareStatement(query);
+		p.clearParameters();
+		p.setString(1, pname);
+		r = p.executeQuery();
+		while(r.next()) {
+			dno = r.getInt(1);
+		}
+		
+		return dno;
+		
+	}
+	
+	/**
+	 * Returns an Employee object with it's field members assigned to the values the
+	 * Employee table has in store for the given ssn queried.
+	 * Return columns are (fname,minit,lname,ssn,bdate,address,sex,salary,superssn,dno)
+	 * @param ssn - the employee to grab info about
+	 * @return e - an employee object
+	 */
+	public Employee getEmployeeInformation(String ssn) throws SQLException {
+		Employee e = new Employee();
+		String query = "select * from EMPLOYEE where ssn = ?";
+		p = conn.prepareStatement(query);
+		p.clearParameters();
+		p.setString(1, ssn);
+		r = p.executeQuery();
+		while(r.next()) {
+			e.setFirstName(r.getString(1));
+			e.setMiddleInitial(r.getString(2));
+			e.setLastName(r.getString(3));
+			e.setSSN(r.getString(4));
+			e.setBirthDate(r.getString(5));
+			e.setAddress(r.getString(6));
+			e.setSex(r.getString(7));
+			e.setSalary(r.getInt(8));
+			e.setSupervisorSSN(r.getString(9));
+			e.setDepartmentNumber(r.getInt(10));
+		}
+		return e;
+	}
+	
+	/**
+	 * Modifies the employee object to set the Employee's dependents
+	 * Uses setDependents from Employee's class to append Dependents
+	 * @param e - Employee whose dependents to add
+	 * @throws SQLException
+	 */
+	public void getDependentsOfEmployee(Employee e) throws SQLException { 
+		String query = "select dependent_name, sex, bdate, relationship where essn = ?";
+		p = conn.prepareStatement(query);
+		p.clearParameters();
+		p.setString(1, e.getSSN());
+		r = p.executeQuery();
+		while(r.next()) {
+			e.setDependents(r.getString(1), r.getString(2), r.getString(3), r.getString(4));
+		}
 	}
 
 	/**
@@ -211,7 +285,12 @@ public class CompanyDB {
 		}
 	}
 	
-	private void insertIntoDependents(Employee e) throws SQLException {
+	/**
+	 * Inserts into the Dependent table the dependents of the given employee
+	 * @param e - the employee
+	 * @throws SQLException
+	 */
+	public void insertIntoDependents(Employee e) throws SQLException {
 		System.out.println("ENTERED DEPENDENTS TABLE");
 		ArrayList<Employee.Dependent> dependentList;
 		Employee.Dependent dependent;
@@ -230,7 +309,6 @@ public class CompanyDB {
 			p.executeUpdate();
 			
 		}
-
 
 	}
 	
