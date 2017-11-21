@@ -23,11 +23,27 @@ public class Employee {
 	private ArrayList<Pair> assignedProjects = new ArrayList<Pair>();
 	private ArrayList<Dependent> deps = new ArrayList<Dependent>();
 
-
+	/**
+	 * Basic constructor to create an empty employee object
+	 */
 	public Employee() {
 		
 		
 	}
+	
+	/**
+	 * Creates a pre-initialized Employee Object
+	 * @param firstName - String of FirstName
+	 * @param minit - String of middle initial
+	 * @param lastName - String of Last Name
+	 * @param sex - String of Sex
+	 * @param Address - String of Address
+	 * @param ssn - String of SSN
+	 * @param superSsn - String of Supervisor's SSN
+	 * @param birthDate - String of Birth Date
+	 * @param salary - Integer of Salary
+	 * @param dno - Integer of Dno
+	 */
 	public Employee(String firstName, String minit, String lastName, String sex, 
 			String Address, String ssn, String superSsn, String birthDate,
 			int salary, int dno) {
@@ -44,18 +60,34 @@ public class Employee {
 		
 	}
 	
+	/**
+	 * Grabs the Employee Object's String name
+	 * @return String of the entire formatted name
+	 */
 	public String getEmployeeName() {
 		return this.fname+" "+this.minit+". "+this.lname;
 	}
 	
+	/**
+	 * Grabs the Employee Object's String first name
+	 * @return String of the First Name
+	 */
 	public String getFirstName() {
 		return this.fname;
 	}
 	
+	/**
+	 * Returns the middle initial of the Employee
+	 * @return - String of Employee's middle initial
+	 */
 	public String getMinit() {
 		return this.minit;
 	}
 	
+	/**
+	 * Returns the Last Name of the Employee
+	 * @return - String of the Last Name
+	 */
 	public String getLastName() {
 		return this.lname;
 	}
@@ -153,7 +185,13 @@ public class Employee {
 		
 	}
 	
-
+	/**
+	 * Creates a Dependent object and assigns it to the Employee's List of Dependents
+	 * @param fname - Dependent's First Name
+	 * @param sex - Sex
+	 * @param bdate - Birthdate
+	 * @param relationship - Relationship
+	 */
 	public void setDependents(String fname, String sex, String bdate, String relationship) {
 		Dependent dep = new Dependent(fname,sex,bdate,relationship);
 		deps.add(dep);
