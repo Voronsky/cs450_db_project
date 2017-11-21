@@ -23,15 +23,14 @@
       <TextField id="ssn_field" fx:id="ssn_field" layoutX="407.0" layoutY="163.0" prefHeight="26.0" prefWidth="129.0" promptText="xxxxxxxxx" />
       <TextField id="birth_date" fx:id="birth_date" layoutX="403.0" layoutY="83.0" prefHeight="26.0" prefWidth="136.0" promptText="dd-mm-year" />
       <TextField id="address_input" fx:id="address_input" layoutX="403.0" layoutY="43.0" promptText="Enter Address" />
-      <Label layoutX="29.0" layoutY="176.0" text="Department Number" />
-      <TextField id="dept_num" fx:id="dept_num" layoutX="173.0" layoutY="171.0" prefHeight="26.0" prefWidth="53.0" promptText="Num" />
-      <CheckBox fx:id="dep_no" layoutX="422.0" layoutY="289.0" mnemonicParsing="false" selected="true" text="No" />
+      <Label layoutX="29.0" layoutY="176.0" text="Department Number:" />
+      <CheckBox fx:id="dep_no" layoutX="422.0" layoutY="289.0" mnemonicParsing="false" text="No" />
       <Label layoutX="309.0" layoutY="290.0" text="Dependents?" />
       <CheckBox fx:id="dep_yes" layoutX="481.0" layoutY="289.0" mnemonicParsing="false" text="Yes" />
       <Label layoutX="309.0" layoutY="328.0" text="Dependent First Name" />
       <TextField id="fx:dep_first_name" fx:id="dep_first_name" editable="false" layoutX="462.0" layoutY="323.0" prefHeight="26.0" prefWidth="136.0" promptText="Enter First Name" />
       <TextArea fx:id="output" layoutX="15.0" layoutY="420.0" prefHeight="147.0" prefWidth="430.0" />
-      <Button fx:id="add_emp_btn" layoutX="16.0" layoutY="382.0" mnemonicParsing="false" text="Add Employee" />
+      <Button fx:id="add_emp_btn" layoutX="22.0" layoutY="369.0" mnemonicParsing="false" text="Add Employee" />
       <Label layoutX="214.0" layoutY="14.0" text="Employee Information Entry">
          <font>
             <Font size="17.0" />
@@ -40,7 +39,7 @@
       <Label layoutX="29.0" layoutY="204.0" text="Assign Project:" />
       <TextField fx:id="pHours" layoutX="221.0" layoutY="220.0" prefHeight="26.0" prefWidth="53.0" promptText="Hours" />
       <Label layoutX="228.0" layoutY="204.0" text="Hours" />
-      <Button fx:id="assignProject" layoutX="33.0" layoutY="276.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="129.0" text="Assign Project" />
+      <Button fx:id="assignProject" layoutX="36.0" layoutY="264.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="129.0" text="Assign Project" />
       <ComboBox fx:id="projectsBox" layoutX="28.0" layoutY="220.0" prefHeight="26.0" prefWidth="182.0" promptText="Projects" />
       <Label layoutX="311.0" layoutY="256.0" text="Salary" />
       <TextField fx:id="salary_input" layoutX="405.0" layoutY="251.0" prefHeight="26.0" prefWidth="112.0" promptText="Enter Salary" />
@@ -55,5 +54,8 @@
       <Label layoutX="487.0" layoutY="361.0" text="Relationship" />
       <TextField fx:id="dep_relationship" editable="false" layoutX="571.0" layoutY="356.0" prefHeight="26.0" prefWidth="136.0" promptText="Enter Relationship" />
       <Button fx:id="add_dep_btn" layoutX="486.0" layoutY="395.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Add Depednent" />
+      <ComboBox fx:id="depNum_comboBox" layoutX="172.0" layoutY="171.0" prefHeight="26.0" prefWidth="97.0" promptText="Select" />
+      <Button fx:id="resetAssigned_btn" layoutX="171.0" layoutY="264.0" mnemonicParsing="false" text="Reset Assigned" />
+      <Label layoutX="230.0" layoutY="400.0" text="Database Output" />
    </children>
 </AnchorPane>
