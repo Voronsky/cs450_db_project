@@ -31,6 +31,9 @@ public class ManagerController {
 	private ComboBox<String> projectsBox;
 	
 	@FXML
+	private ComboBox<String> depNum_comboBox;
+	
+	@FXML
 	private TextField fname_input;
 
 	@FXML
@@ -99,9 +102,11 @@ public class ManagerController {
 	Pair projectPair;
 	private static final double MAX_HOURS = 40.00;
 	private ArrayList<String> listOfProjects;
+	private ArrayList<Integer> listOfDepNums;
 	private ArrayList<Pair> selectedProjects = new ArrayList<Pair>();
 	private ArrayList<String> missingFields = new ArrayList<String>();
 	private ObservableList<String> projectList = FXCollections.observableArrayList();
+	private ObservableList<Integer> depNums = FXCollections.observableArrayList();
 	private Alert alert = new Alert(AlertType.ERROR);
 	private double totalHours = 0;
 	private String missingValues = "";
@@ -109,16 +114,29 @@ public class ManagerController {
 	GUIController loginGui = new GUIController();
 	
 	
+	/**
+	 * This will load values into the ComboBoxes before the Window is shown.
+	 * The values in the combo Boxes are also pulled from the Company Database
+	 * @throws IOException
+	 */
 	@FXML
 	protected void initialize() throws IOException {
 		int listSize = 0;
 		try {
 			
-			//alert.setTitle("Employee Creation Error");
-			//alert.setHeaderText("Attention Required!");
 			employee = new Employee();
-			company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
+			//company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
+			company = new CompanyDB();
 			listOfProjects = company.getProjectList();
+			listOfDepNums = company.getDepartmentNumbers();
+			for (int i = 0; i < listOfDepNums.size(); i++) {
+				depNums.add(listOfDepNums.get(i));
+			}
+			System.out.println("---List of Department Numbers---");
+			for (int i = 0; i<depNums.size(); i++) {
+				System.out.println(depNums.get(i));
+				depNum_comboBox.getItems().add(depNums.get(i).toString());
+			}
 			System.out.println("---List of Projects --- ");
 			System.out.println(listOfProjects);
 			assert listOfProjects.size() > 0;
@@ -147,6 +165,7 @@ public class ManagerController {
 				addEmployee();
 			}
 		});
+
 		
 		/**
 		 * Creates a list of Pairs which contain (Project, Hours)
@@ -160,37 +179,39 @@ public class ManagerController {
 				try {
 					pair.setHours(Double.parseDouble(pHours.getText()));
 					pair.setProject(projectsBox.getSelectionModel().getSelectedItem().toString());
-				}
-				catch(Exception e){
-					alert.setHeaderText("Fatal Exception error");
-					alert.setContentText(e.toString());
-					alert.showAndWait();
-					System.exit(1);
-				}
-				System.out.println("---- INFO: Project Selected and Hours assigned ---");
-				System.out.println(pair.getProject()+"\t"+pair.getHours());
-				selectedProjects.add(pair);
-				if(exceedsMaxHours(selectedProjects)) {
+				
+					System.out.println("---- INFO: Project Selected and Hours assigned ---");
+					System.out.println(pair.getProject()+"\t"+pair.getHours());
+					selectedProjects.add(pair);
+					if(exceedsMaxHours(selectedProjects)) {
 						selectedProjects.clear();
 						alert.setHeaderText("More than max Hours allowed");
 						alert.setContentText("No more than a total of 40 hours can be assigned to an employee. Try again");
 						alert.showAndWait();
-				}
-				else if(duplicateProjects(selectedProjects) > 0) {
-					index = duplicateProjects(selectedProjects);
-					selectedProjects.remove(index);
-					alert.setHeaderText("Duplicate Project");
-					alert.setContentText("Project selected has already been assigned.");
+					}
+					else if(duplicateProjects(selectedProjects) > 0) {
+						index = duplicateProjects(selectedProjects);
+						selectedProjects.remove(index);
+						alert.setHeaderText("Duplicate Project");
+						alert.setContentText("Project selected has already been assigned.");
+						alert.showAndWait();
+					}
+					else {
+						outputText = outputText + "\n" + "Assigned " + pair.getProject() + " to Employee\t Hours: " + pair.getHours();
+						output.setText(outputText);
+						projectsBox.getSelectionModel().clearSelection();
+					}
+				}catch(Exception e){
+					alert.setHeaderText("Project error");
+					alert.setContentText("No Project was Selected");
 					alert.showAndWait();
 				}
-				else {
-					outputText = outputText + "\n" + "Assigned " + pair.getProject() + " to Employee\t Hours: " + pair.getHours();
-					output.setText(outputText);
-				}
-
 			}
 		});
 		
+		/**
+		 * ActionEvent handler for when Dependents need to be added to an employee
+		 */
 		dep_yes.selectedProperty().addListener(new ChangeListener<Boolean>(){
 			public void changed(ObservableValue<? extends Boolean> ov, 
 					Boolean old_val, Boolean new_val) {
@@ -210,6 +231,31 @@ public class ManagerController {
 			}
 		});
 		
+		/**
+		 * ActionEvent handler for when No Dependents are to be added to the employee
+		 */
+		dep_no.selectedProperty().addListener(new ChangeListener<Boolean>(){
+			public void changed(ObservableValue<? extends Boolean> ov, 
+					Boolean old_val, Boolean new_val) {
+				System.out.println(new_val);
+				if(new_val) {
+					dep_first_name.setEditable(false);
+					dep_sex.setEditable(false);
+					dep_bdate.setEditable(false);
+					dep_relationship.setEditable(false);
+				}
+				else {
+					dep_first_name.setEditable(true);
+					dep_sex.setEditable(true);
+					dep_bdate.setEditable(true);
+					dep_relationship.setEditable(true);
+				}
+			}
+		});
+
+		/**
+		 * Adds the Dependent to the employee
+		 */
 		add_dep_btn.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
@@ -267,7 +313,7 @@ public class ManagerController {
 				missingValues = missingValues + "\nMissing Number of Hours for Project";
 			}
 			
-			if(dept_num.getText().isEmpty()) {
+			if(depNum_comboBox.getSelectionModel().getSelectedItem() == null) {
 				missingValues = missingValues + "\nMissing Department Values";
 			}
 			
@@ -279,6 +325,17 @@ public class ManagerController {
 					|| dep_yes.isSelected() && dep_no.isSelected()) {
 				missingValues = missingValues + "\nIndicate has Dependents or not";
 			}
+
+			if(!minimumOneProject(selectedProjects,
+					Integer.parseInt(
+							depNum_comboBox.getSelectionModel().getSelectedItem()
+							)))
+			{ 
+				missingValues = missingValues +"\nat least 1 project from department";
+			}
+			/*if(multipleProjectsSameDept(selectedProjects)) {
+				missingValues = missingValues +"\nMore than two projects are from same department";
+			}*/
 			
 			if(missingValues.length()>0) {
 				alert.setContentText(missingValues);
@@ -296,18 +353,25 @@ public class ManagerController {
 				employee.setSSN(ssn_field.getText());
 				employee.setSupervisorSSN(superssn_input.getText());
 				employee.setSalary(Integer.parseInt(salary_input.getText()));
-				employee.setDepartmentNumber(Integer.parseInt(dept_num.getText()));
+				//employee.setDepartmentNumber(Integer.parseInt(dept_num.getText()));
+				employee.setDepartmentNumber(Integer.parseInt(
+						depNum_comboBox.getSelectionModel().getSelectedItem())
+						);
 				employee.setAssignedProjects(selectedProjects);
 				employee.printDebugEmployeeeInfo();
 				System.out.println("------------------------------------");
-				clearScreen();
 				company.insertIntoEmployeeTable(employee);
-				System.out.println("Inserting EMployee Succeeded!");
+				System.out.println("Inserting Employee Succeeded!");
 				company.insertIntoWorksOn(employee);
 				System.out.println("Inserting into Works on succeeded");
+				if(employee.getDepedent().size()>0) {
+					company.insertIntoDependents(employee);
+					System.out.println("Inserting into Dependents succeeded");
+				}
+				printResult(ssn_field.getText());
 				cleanUp();
+				clearScreen();
 				employee.printDebugEmployeeeInfo();
-				//company.insertIntoWorksOn(employee);
 			}
 		}
 		catch(Exception e) {
@@ -357,6 +421,103 @@ public class ManagerController {
 	}
 	
 	/**
+	 * Checks to make sure that no more than 2 projects assigned are from the same department
+	 * @param selectedProjects
+	 * @return false if no more than 2 were assigned, true if more than 2 were assigned
+	 */
+	private Boolean multipleProjectsSameDept(ArrayList<Pair> selectedProjects) {
+		int dno = 0;
+		int dno2 = 0;
+		for(int i = 0; i < selectedProjects.size(); i++) {
+			int count = 0;
+			try {
+				dno = company.getDepartmentNumber(selectedProjects.get(i).getProject());
+			}
+			catch(SQLException se) {
+				se.printStackTrace();
+			}
+			for( int j = 0; i < selectedProjects.size(); j++) {
+				try {
+					dno2 = company.getDepartmentNumber(selectedProjects.get(j).getProject());
+				}
+				catch(SQLException se) {
+					se.printStackTrace();
+				}
+				if(dno == dno2) count++;
+				if(count>2) return true;
+			}
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Checks to see if at least one of the assigned projects corresponds to the
+	 * Employee's Department Number. Needs to query the Company DB for each Project
+	 * to grab their respective Project Numbers
+	 * @param e
+	 * @param dno
+	 * @return true if at least one assigned project corresponds to DNO, false if not
+	 */
+	private Boolean minimumOneProject(ArrayList<Pair> selectedProjects, int dno) {
+		//ArrayList<Pair> projs = new ArrayList<Pair>();
+		ArrayList<Integer> projNums = new ArrayList<Integer>();
+		String pname = "";
+		for(int i = 0; i < selectedProjects.size(); i++) {
+			pname = selectedProjects.get(i).getProject();
+			try {
+				dno = company.getDepartmentNumber(pname);
+				projNums.add(dno);
+			}
+			catch(SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		if(!projNums.contains(dno)) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void printResult(String ssn) {
+		String result = "-----Database REPORT -------\n";
+		Employee e;
+		Employee.Dependent d;
+		ArrayList<Pair> projs;
+		Calendar cal = Calendar.getInstance();
+		cal.clear();
+		cal.set(Calendar.YEAR, 1900);
+		
+		try {
+			e = company.getEmployeeInformation(ssn);
+			result = result + e.getEmployeeName() + "\n"
+					+ "SSN: "+e.getSSN()+"\n" + "Address: "+e.getAddress()+"\n"
+					+ "Birth Date: " + e.getBirthDate()+"\n"
+					+ "Sex: " + e.getSex() +"\n"
+					+ "Department Number: "+e.getDepartmentNum()+"\n";
+			result = result + "----Projects Assigned----\n";
+			projs = company.getEmployeeProjects(e);
+			for(int i=0; i<projs.size();i++) {
+				result = result + projs.get(i).getProject()+"\t"+projs.get(i).getHours()
+						+"\n";
+			}
+			company.getDependentsOfEmployee(e);
+			if(e.getDepedent().size()>0) {
+				result = result + "Employee's Dependents:\n";
+				for(int i=0; i<e.getDepedent().size(); i++) {
+					d = e.getDepedent().get(i);
+					result = result + d.getName() + " " + " "+
+					d.getBirthDate()+" "+d.getRelationship();
+				}
+			}
+			output.setText(result);
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Clears out the GUI inputs
 	 */
 	private void clearScreen() {
@@ -368,7 +529,8 @@ public class ManagerController {
 		ssn_field.clear();
 		superssn_input.clear();
 		birth_date.clear();
-		dept_num.clear();
+		depNum_comboBox.getSelectionModel().clearSelection();
+		projectsBox.getSelectionModel().clearSelection();
 		salary_input.clear();
 		sex_input.clear();
 	}
