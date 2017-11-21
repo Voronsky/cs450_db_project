@@ -65,7 +65,7 @@ public class GUIController {
 	private boolean getSSNInput(String ssn) {
 		String checkSsn = ssn;
 		try {
-			CompanyDB company = new CompanyDB("@apollo.vse.gmu.edu:1521:ite10g","idiaz3","oahiwh");
+			CompanyDB company = new CompanyDB();
 			mgrCheck = company.isManager(checkSsn);
 			if (mgrCheck) {
 				db_output.setText("Welcome to the Company Database");
