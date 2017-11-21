@@ -22,27 +22,40 @@ import java.math.BigDecimal;
  */
 
 public class CompanyDB {
-	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy");
-	private String db_url = "";
-	private String pass = "";
-	private String username="";
+	//SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
 	private Connection conn;
 	private PreparedStatement p;
 	private ResultSet r;
+	private static String DBINFO = "jdbc:oracle:thin:@apollo.vse.gmu.edu:1521:ite10g";
+	private static String DBUSERNAME = "idiaz3";
+	private static String DBPASSW = "oahiwh";
+	private static String DRIVERNAME = "oracle.jdbc.driver.OracleDriver";
+
 	
-	public CompanyDB(String db,String pw, String dbUsername) throws SQLException, IOException {
-		this.db_url = "jdbc:oracle:thin:"+db;
-		this.pass = pw;
-		this.username = dbUsername;
+	public CompanyDB() throws SQLException, IOException {
+		//this.pass = ;
+		//this.username = dbUsername;
 		
+		/*
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Class.forName(DRIVERNAME);
 		}catch(ClassNotFoundException x) {
 			System.out.println("Driver could not be loaded");
 		}
 		
-		this.conn = DriverManager.getConnection(this.db_url,this.pass,this.username);
+		this.conn = DriverManager.getConnection(DBINFO, DBUSERNAME,DBPASSW);
+		*/
+	}
+	
+	public void initiateConnection() throws SQLException, IOException {
+		try {
+			Class.forName(DRIVERNAME);
+		}catch(ClassNotFoundException x) {
+			System.out.println("Driver could not be loaded");
+		}
 		
+		this.conn = DriverManager.getConnection(DBINFO, DBUSERNAME,DBPASSW);
 	}
 	
 	/**
@@ -54,6 +67,11 @@ public class CompanyDB {
 	public boolean isManager(String ssn) throws SQLException {
 		String query = "select * from department where mgrssn = ?";
 		String mgrSsn = "";
+		try {
+			initiateConnection();
+		}catch(IOException ie) {
+			ie.printStackTrace();
+		}
 		p = conn.prepareStatement(query);
 		p.clearParameters();
 		p.setString(1,ssn);
@@ -65,9 +83,9 @@ public class CompanyDB {
 		}
 		System.out.println(mgrSsn);
 		System.out.println(mgrSsn.length());
-		/*if(mgrSsn.length()==0) {
-			return false;
-		}*/
+		conn.close();
+		r.close();
+		p.close();
 		return true;
 		
 	}
@@ -79,6 +97,11 @@ public class CompanyDB {
 	 * @throws SQLException
 	 */
 	public ArrayList<String> getProjectList() throws SQLException {
+		try {
+			initiateConnection();
+		}catch(IOException ie) {
+			ie.printStackTrace();
+		}
 		ArrayList<String> listOfProjects = new ArrayList<String>();
 		String query = "select pname from project";
 		String project = "";
@@ -94,6 +117,9 @@ public class CompanyDB {
 		while(itr.hasNext()) {
 			System.out.println(itr.next());
 		}
+		p.close();
+		r.close();
+		conn.close();
 		return listOfProjects;
 
 	}
@@ -105,6 +131,11 @@ public class CompanyDB {
 	 * @throws SQLException
 	 */
 	public BigDecimal getProjectNumber(String pName) throws SQLException {
+		try {
+			initiateConnection();
+		}catch(IOException ie) {
+			ie.printStackTrace();
+		}
 		String query = "select pnumber from project where pname = ?";
 		BigDecimal pno = null;
 		System.out.print("Project Name to get PNO from:" + pName);
@@ -115,7 +146,32 @@ public class CompanyDB {
 		while(r.next()) {
 			pno = r.getBigDecimal(1);
 		}
+		p.close();
+		r.close();
+		conn.close();
 		return pno;
+		
+	}
+	
+	/**
+	 * Grabs a list of available department numbers from the database
+	 * @return  an ArrayList<Integer> of department numbers
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	public ArrayList<Integer> getDepartmentNumbers() throws SQLException, IOException{
+		ArrayList<Integer> depNums = new ArrayList<Integer>();
+		String query = "select dnumber from department";
+		initiateConnection();
+		p = conn.prepareStatement(query);
+		r = p.executeQuery();
+		while(r.next()) {
+			depNums.add(r.getInt(1));
+		}
+		conn.close();
+		p.close();
+		r.close();
+		return depNums;
 		
 	}
 	
@@ -126,9 +182,14 @@ public class CompanyDB {
 	 * @throws SQLException
 	 */
 	public int getDepartmentNumber(String pname) throws SQLException {
-
 		int dno = 0;
 		String query = "select dnum from project where pname = ?";
+		try {
+			initiateConnection();
+		}catch(IOException ie) {
+			ie.printStackTrace();
+			
+		}
 		p = conn.prepareStatement(query);
 		p.clearParameters();
 		p.setString(1, pname);
@@ -136,6 +197,9 @@ public class CompanyDB {
 		while(r.next()) {
 			dno = r.getInt(1);
 		}
+		r.close();
+		p.close();
+		conn.close();
 		
 		return dno;
 		
@@ -149,8 +213,16 @@ public class CompanyDB {
 	 * @return e - an employee object
 	 */
 	public Employee getEmployeeInformation(String ssn) throws SQLException {
+		System.out.println("---Entering EMPLOYEE INFORMATION METHOD---");
+		System.out.println("SSN Entered: "+ssn);
 		Employee e = new Employee();
-		String query = "select * from EMPLOYEE where ssn = ?";
+		try {
+			initiateConnection();
+		}catch(IOException ie) {
+			ie.printStackTrace();
+		}
+		String query = "select fname,minit,lname,ssn,bdate,address,sex,salary,superssn,dno " +
+		"from EMPLOYEE where ssn = ?";
 		p = conn.prepareStatement(query);
 		p.clearParameters();
 		p.setString(1, ssn);
@@ -167,7 +239,43 @@ public class CompanyDB {
 			e.setSupervisorSSN(r.getString(9));
 			e.setDepartmentNumber(r.getInt(10));
 		}
+		e.printDebugEmployeeeInfo();
+		r.close();
+		p.close();
+		conn.close();
+		
 		return e;
+	}
+	
+	public ArrayList<Pair> getEmployeeProjects(Employee e) throws SQLException, IOException {
+		Pair pair = new Pair();
+		ArrayList<Pair> list = new ArrayList<Pair>();
+		ArrayList<BigDecimal> pnos  = new ArrayList<BigDecimal>();
+		initiateConnection();
+		String pnoQuery = "select pno,hours from works_on where essn = ?";
+		String pnameQuery = "select pname from project where pnumber = ?";
+		p = conn.prepareStatement(pnoQuery);
+		p.clearParameters();
+		p.setString(1, e.getSSN());
+		r = p.executeQuery();
+		while(r.next()) {
+			pnos.add(r.getBigDecimal((1)));
+			pair.setHours(r.getBigDecimal(2).doubleValue());
+		}
+		p.close();
+		p = conn.prepareStatement(pnameQuery);
+		for(int i=0; i<pnos.size();i++) {
+			p.clearParameters();
+			p.setBigDecimal(1, pnos.get(i));
+			r = p.executeQuery();
+			while(r.next()) {
+				pair.setProject(r.getString(1));
+			}
+		}
+		p.close();
+		r.close();
+		conn.close();
+		return list;
 	}
 	
 	/**
@@ -177,14 +285,26 @@ public class CompanyDB {
 	 * @throws SQLException
 	 */
 	public void getDependentsOfEmployee(Employee e) throws SQLException { 
-		String query = "select dependent_name, sex, bdate, relationship where essn = ?";
+		try {
+			initiateConnection();
+		}catch(IOException ie) {
+			ie.printStackTrace();
+		}
+		String query = "select dependent_name, sex, bdate, relationship"
+				+ " from dependent where essn = ?";
 		p = conn.prepareStatement(query);
 		p.clearParameters();
+		System.out.println("P: "+p.toString());
 		p.setString(1, e.getSSN());
 		r = p.executeQuery();
+		System.out.println("r: "+r.toString());
 		while(r.next()) {
-			e.setDependents(r.getString(1), r.getString(2), r.getString(3), r.getString(4));
+			e.setDependents(r.getString(1), r.getString(2), r.getDate(3).toString(), r.getString(4));
 		}
+		p.close();
+		r.close();
+		conn.close();
+		
 	}
 
 	/**
@@ -193,9 +313,20 @@ public class CompanyDB {
 	 * @param e - of Employee type
 	 * @throws SQLException
 	 */
-	public void insertIntoEmployeeTable(Employee e) throws SQLException {
+	public void insertIntoEmployeeTable(Employee e) throws IOException {
 		System.out.println("ENTER EMPLOYEE TABLE INSERT");
 		e.printDebugEmployeeeInfo();
+		/*Connection c = null;
+		try {
+			Class.forName(DRIVERNAME);
+		}catch(ClassNotFoundException x) {
+			System.out.println("Driver could not be loaded");
+		}
+		try {
+			c = DriverManager.getConnection(DBINFO,DBUSERNAME,DBPASSW);
+		}catch(SQLException se) {
+			se.printStackTrace();
+		}*/
 		BigDecimal numberSalary = new BigDecimal(e.getSalary());
 		BigDecimal numberDeptNum = new BigDecimal(e.getDepartmentNum());
 		java.sql.Date sqlDate = null;
@@ -207,32 +338,42 @@ public class CompanyDB {
 			z.printStackTrace();
 		}
 
-		String query = "INSERT INTO EMPLOYEE (fname,minit,lname,ssn,bdate,address,sex,salary,superssn,dno,email)"
-				+ "VALUES(?,?,?,?,?,?,?,?,?,?,null)";
+		String query = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?,null)";
 		
 		/**
+		 * fname, minit, lname, ssn, date, address, sex,salary, superssn, deptNum, email
 		 * varchar,varchar,vchar,char,date,varchar,char,number,char,number,varchar
 		 */
 
-		p = conn.prepareStatement(query);
-		p.clearParameters();
-		p.setString(1, e.getFirstName());
-		p.setString(2, e.getMinit());
-		p.setString(3, e.getLastName());
-		p.setString(4, e.getSSN());
-		//p.setDate(5, sqlDate); //birthdate
-		//p.setDate(5, (Date)"27-JAN-93");
-		p.setDate(5, null);
-		p.setString(6, e.getAddress());
-		p.setString(7, e.getSex());
-		p.setBigDecimal(8, numberSalary);
-		p.setString(9, e.getSupervisorSSN());
-		p.setBigDecimal(10, numberDeptNum);
-		//p.executeQuery();
-		p.executeUpdate();
-		System.out.println(r);
-		System.out.println("---CHECKING VALUES---");
-		//System.out.println(sqlDate);
+		try {
+			initiateConnection();
+			p = conn.prepareStatement(query);
+			p.clearParameters();
+			p.setString(1, e.getFirstName());
+			p.setString(2, e.getMinit());
+			p.setString(3, e.getLastName());
+			p.setString(4, e.getSSN());
+			//p.setDate(5, sqlDate); //birthdate
+			p.setDate(5, sqlDate);
+			p.setString(6, e.getAddress());
+			p.setString(7, e.getSex());
+			p.setBigDecimal(8, numberSalary);
+			p.setString(9, e.getSupervisorSSN());
+			p.setBigDecimal(10, numberDeptNum);
+			p.executeUpdate();
+			System.out.println(r);
+			conn.close();
+			p.close();
+			r.close();
+		}
+		catch(SQLException se) {
+			System.out.println("ERROR CODE: "+se.getErrorCode());
+			System.out.println(se.getSQLState());
+			System.out.println(se.getCause());
+			System.out.println(se.getMessage());
+			System.out.println(se.getStackTrace());
+
+		}
 		System.out.println("EXITED EMPLOYEE TABLE INSERT");
 		
 	}
@@ -248,13 +389,14 @@ public class CompanyDB {
 	 * @param e
 	 * @throws SQLException
 	 */
-	public void insertIntoWorksOn(Employee e) throws SQLException {
+	public void insertIntoWorksOn(Employee e) throws SQLException, IOException {
 		System.out.println("ENTERED INSERT WORKS_ON TABLE");
 		ArrayList<ProjectPair> numOfProjects = new ArrayList<ProjectPair>();
 		String pName = null;
 		BigDecimal pno;
 		BigDecimal hours;
 		String insertQuery = "insert INTO works_on(essn,pno,hours) values(?,?,?)";
+
 		for(int i = 0; i<e.getAssignedProjects().size();i++) {
 			pName = e.getProjectName(i);
 			pno = getProjectNumber(pName);
@@ -262,19 +404,9 @@ public class CompanyDB {
 			ProjectPair pair = new ProjectPair(pno, hours);
 			pair.debugPrint();
 			numOfProjects.add(pair);
-			/*p = conn.prepareStatement(pnoQuery);
-			p.clearParameters();
-			p.setString(1, pName);
-			r = p.executeQuery(pnoQuery);
-			while(r.next()) {
-				pno = r.getBigDecimal(1);
-				hours = new BigDecimal(e.getProjectHours(i));
-				ProjectPair pair = new ProjectPair(pno, hours);
-				pair.debugPrint();
-				numOfProjects.add(pair);
-			}*/
 		}
 		
+		initiateConnection();
 		for(int i = 0; i<numOfProjects.size();i++) {
 			p = conn.prepareStatement(insertQuery);
 			p.clearParameters();
@@ -283,6 +415,10 @@ public class CompanyDB {
 			p.setBigDecimal(3, numOfProjects.get(i).getHours());
 			p.executeUpdate();
 		}
+		
+		p.close();
+		conn.close();
+		
 	}
 	
 	/**
@@ -290,13 +426,15 @@ public class CompanyDB {
 	 * @param e - the employee
 	 * @throws SQLException
 	 */
-	public void insertIntoDependents(Employee e) throws SQLException {
+	public void insertIntoDependents(Employee e) throws SQLException, IOException {
 		System.out.println("ENTERED DEPENDENTS TABLE");
 		ArrayList<Employee.Dependent> dependentList;
 		Employee.Dependent dependent;
 		String query = "insert into DEPENDENT(essn,dependent_name,sex,bdate,relationship)"
 				+"values(?,?,?,?,?)";
+		initiateConnection();
 		dependentList = e.getDepedent();
+
 		for(int i = 0; i<dependentList.size();i++) {
 			dependent = dependentList.get(i);
 			p = conn.prepareStatement(query);
@@ -309,6 +447,8 @@ public class CompanyDB {
 			p.executeUpdate();
 			
 		}
+		p.close();
+		conn.close();
 
 	}
 	
