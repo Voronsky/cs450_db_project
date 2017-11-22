@@ -283,6 +283,7 @@ public class ManagerController {
 	 */
 	@FXML
 	protected void addEmployee() {
+		output.setText("Checking input . . . ");
 		missingValues = "";
 		try {
 			if(fname_input.getText().isEmpty()) {
@@ -300,12 +301,21 @@ public class ManagerController {
 			if(ssn_field.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing SSN";
 			}
+			//Seems this method is short by 1 letter, so 9 letter length is 8??
+			if(ssn_field.getText().length() != 9){
+				System.out.println("SSN Length input: "+birth_date.getText().length());
+				missingValues = missingValues +"\nMissing 9-digit SSN";
+			}
 			if(superssn_input.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing Supervisor SSN";
+			}
+			if(superssn_input.getText().length() != 9) {
+				missingValues = missingValues +"\nMissing 9-digit Supervisor SSN";
 			}
 			if(birth_date.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing Birth date";
 			}
+		
 			if(salary_input.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing Salary";
 			}
@@ -340,9 +350,9 @@ public class ManagerController {
 			if(missingValues.length()>0) {
 				alert.setContentText(missingValues);
 				alert.showAndWait();
+				missingValues ="";
 			}
 			else {
-
 				System.out.println("----DEBUG ATTEMPT TO ADD EMPLOYEE ---");
 				employee.setFirstName(fname_input.getText());
 				employee.setLastName(lname_input.getText());
@@ -359,12 +369,13 @@ public class ManagerController {
 						);
 				employee.setAssignedProjects(selectedProjects);
 				employee.printDebugEmployeeeInfo();
+				output.setText("Connecting to Database, please wait . . . ");
 				System.out.println("------------------------------------");
 				company.insertIntoEmployeeTable(employee);
 				System.out.println("Inserting Employee Succeeded!");
 				company.insertIntoWorksOn(employee);
 				System.out.println("Inserting into Works on succeeded");
-				if(employee.getDepedent().size()>0) {
+				if(employee.getDepedents().size()>0) {
 					company.insertIntoDependents(employee);
 					System.out.println("Inserting into Dependents succeeded");
 				}
@@ -376,6 +387,11 @@ public class ManagerController {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+			cleanUp();
+			clearScreen();
+			alert.setTitle("Fatal Error");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 		
 	}
@@ -502,10 +518,10 @@ public class ManagerController {
 						+"\n";
 			}
 			company.getDependentsOfEmployee(e);
-			if(e.getDepedent().size()>0) {
-				result = result + "Employee's Dependents:\n";
-				for(int i=0; i<e.getDepedent().size(); i++) {
-					d = e.getDepedent().get(i);
+			if(e.getDepedents().size()>0) {
+				result = result + "----Employee's Dependents----\n";
+				for(int i=0; i<e.getDepedents().size(); i++) {
+					d = e.getDepedents().get(i);
 					result = result + d.getName() + " " + " "+
 					d.getBirthDate()+" "+d.getRelationship();
 				}
@@ -538,6 +554,9 @@ public class ManagerController {
 	private void cleanUp() {
 		employee = new Employee();
 		listOfProjects.clear();
+		dep_no.setSelected(false);
+		dep_yes.setSelected(false);
+		selectedProjects.clear();
 		outputText = "";
 	}
 
