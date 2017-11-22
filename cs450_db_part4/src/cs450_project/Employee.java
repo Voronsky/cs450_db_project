@@ -2,6 +2,7 @@
  * 
  */
 package cs450_project;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -124,7 +125,7 @@ public class Employee {
 		return this.assignedProjects;
 	}
 	
-	public ArrayList<Dependent> getDepedent() {
+	public ArrayList<Dependent> getDepedents() {
 		return this.deps;
 	}
 	
@@ -194,6 +195,7 @@ public class Employee {
 	 */
 	public void setDependents(String fname, String sex, String bdate, String relationship) {
 		Dependent dep = new Dependent(fname,sex,bdate,relationship);
+		dep.setSQLBdate(bdate);
 		deps.add(dep);
 	}
 	
@@ -234,6 +236,7 @@ public class Employee {
 		private String sex;
 		private String bdate;
 		private String relationship;
+		private java.sql.Date sqlBdate;
 		
 		public Dependent() {
 			
@@ -248,6 +251,17 @@ public class Employee {
 			this.relationship = relationship;
 		}
 		
+		public void setSQLBdate(String birthday) {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+			try {
+				java.util.Date javaDate = sdf.parse(this.getBirthDate());
+				System.out.println("javaDate: "+javaDate);
+				this.sqlBdate = new java.sql.Date(javaDate.getTime());
+			}catch(Exception z) {
+				z.printStackTrace();
+			}
+		}
+
 		public String getName() {
 			return this.name;
 		}
@@ -260,9 +274,19 @@ public class Employee {
 			return this.bdate;
 		}
 		
+		/**
+		 * Retrieves the java.SQL.Date birthday value
+		 * @return - (java.SQL.date) sqlBirthday
+		 */
+		public java.sql.Date getSQLBirthdayFormat(){
+			return this.sqlBdate;
+		}
+		
 		public String getRelationship() {
 			return this.relationship;
 		}
+		
+		
 		
 	}
 	
