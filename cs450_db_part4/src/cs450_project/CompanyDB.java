@@ -138,7 +138,7 @@ public class CompanyDB {
 		}
 		String query = "select pnumber from project where pname = ?";
 		BigDecimal pno = null;
-		System.out.print("Project Name to get PNO from:" + pName);
+		System.out.print("Project Name to get PNO for:" + pName+"\n");
 		p = conn.prepareStatement(query);
 		p.clearParameters();
 		p.setString(1, pName);
@@ -248,7 +248,6 @@ public class CompanyDB {
 	}
 	
 	public ArrayList<Pair> getEmployeeProjects(Employee e) throws SQLException, IOException {
-		Pair pair = new Pair();
 		ArrayList<Pair> list = new ArrayList<Pair>();
 		ArrayList<BigDecimal> pnos  = new ArrayList<BigDecimal>();
 		initiateConnection();
@@ -259,17 +258,23 @@ public class CompanyDB {
 		p.setString(1, e.getSSN());
 		r = p.executeQuery();
 		while(r.next()) {
-			pnos.add(r.getBigDecimal((1)));
+			//pnos.add(r.getBigDecimal((1)));
+			Pair pair = new Pair();
+			pair.setProjectPno(r.getBigDecimal(1));
 			pair.setHours(r.getBigDecimal(2).doubleValue());
+			list.add(pair);
 		}
+		//System.out.println("PNOs Retreived:\n"+pnos);
 		p.close();
 		p = conn.prepareStatement(pnameQuery);
-		for(int i=0; i<pnos.size();i++) {
+		for(int i=0; i<list.size();i++) {
+			System.out.println("Querying hours for Pno: "+list.get(i).getProjectPno());
 			p.clearParameters();
-			p.setBigDecimal(1, pnos.get(i));
+			//p.setBigDecimal(1, pnos.get(i));
+			p.setBigDecimal(1, list.get(i).getProjectPno());
 			r = p.executeQuery();
 			while(r.next()) {
-				pair.setProject(r.getString(1));
+				list.get(i).setProject(r.getString(1));
 			}
 		}
 		p.close();
@@ -279,9 +284,10 @@ public class CompanyDB {
 	}
 	
 	/**
-	 * Modifies the employee object to set the Employee's dependents
-	 * Uses setDependents from Employee's class to append Dependents
-	 * @param e - Employee whose dependents to add
+	 * Modifies the employee object to set the Employee's dependents.
+	 * 	Uses setDependents() from the Employee class to append Dependents to
+	 *  the passed  employee object
+	 * @param e - Employee object whose dependent field member needs to be modified
 	 * @throws SQLException
 	 */
 	public void getDependentsOfEmployee(Employee e) throws SQLException { 
@@ -299,7 +305,10 @@ public class CompanyDB {
 		r = p.executeQuery();
 		System.out.println("r: "+r.toString());
 		while(r.next()) {
-			e.setDependents(r.getString(1), r.getString(2), r.getDate(3).toString(), r.getString(4));
+			e.setDependents(r.getString(1), 
+					r.getString(2), 
+					r.getDate(3).toString(), 
+					r.getString(4));
 		}
 		p.close();
 		r.close();
@@ -433,16 +442,23 @@ public class CompanyDB {
 		String query = "insert into DEPENDENT(essn,dependent_name,sex,bdate,relationship)"
 				+"values(?,?,?,?,?)";
 		initiateConnection();
-		dependentList = e.getDepedent();
+		dependentList = e.getDepedents();
 
 		for(int i = 0; i<dependentList.size();i++) {
 			dependent = dependentList.get(i);
+			/*try {
+				java.util.Date javaDate = sdf.parse(dependent.getBirthDate());
+				System.out.println("javaDate: "+javaDate);
+				sqlDate = new java.sql.Date(javaDate.getTime());
+			}catch(Exception z) {
+				z.printStackTrace();
+			}*/
 			p = conn.prepareStatement(query);
 			p.clearParameters();
 			p.setString(1, e.getSSN());
 			p.setString(2, dependent.getName());
 			p.setString(3, dependent.getSex());
-			p.setDate(4, null);
+			p.setDate(4, dependent.getSQLBirthdayFormat());
 			p.setString(5,dependent.getRelationship());
 			p.executeUpdate();
 			
@@ -472,7 +488,7 @@ public class CompanyDB {
 		}
 		
 		private void debugPrint() {
-			System.out.println("---DEBUG PROJECTPAIR ---");
+			System.out.println("---DEBUG PROJECTPAIR ---\n");
 			System.out.println(this.pno);
 			System.out.println(this.hours);
 			System.out.println("----END OF DEBUG PROJECTPAIR --");
