@@ -26,12 +26,7 @@ public class Main extends Application {
 			primaryStage.setTitle("CS450 Company Database");
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			/*login_btn.setOnAction(new EventHandler<ActionEvent>(){
-				public void handle(ActionEvent event) {
-					;
-				}
-			});*/
-			
+						
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
