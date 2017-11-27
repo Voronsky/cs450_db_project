@@ -94,7 +94,7 @@ public class ManagerController {
 	private Button assignProject;
 	
 	@FXML
-	private Button resetAssign_btn;
+	private Button resetAssigned_btn;
 	
 	@FXML
 	private Button add_dep_btn;
@@ -215,11 +215,12 @@ public class ManagerController {
 		/**
 		 * Clears the ArrayList of selectedProjects, thus having to choose new ones
 		 */
-		resetAssign_btn.setOnAction(new EventHandler<ActionEvent>() {
+		resetAssigned_btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				selectedProjects.clear();
-				output.setText("Assigned projects cleared");
+				outputText = outputText + "Assigned projects cleared";
+				output.setText(outputText);
 			}
 		});
 		
@@ -329,6 +330,9 @@ public class ManagerController {
 			if(birth_date.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing Birth date";
 			}
+			if(birth_date.getText().length() != 8) {
+				missingValues = missingValues +"\nDate format dd-mm-yy";
+			}
 		
 			if(salary_input.getText().isEmpty()) {
 				missingValues = missingValues + "\nMissing Salary";
@@ -348,6 +352,18 @@ public class ManagerController {
 			if(!dep_yes.isSelected() && !dep_no.isSelected()
 					|| dep_yes.isSelected() && dep_no.isSelected()) {
 				missingValues = missingValues + "\nIndicate has Dependents or not";
+			}
+			if(dep_yes.isSelected()) {
+					if(dep_bdate.getText().length() != 8) {
+						missingValues = missingValues + "\nDependet date format, dd-mm-yy";
+					}
+					if(dep_relationship.getText().isEmpty()) {
+						missingValues = missingValues +"\nDependent relationship missing";
+					}
+					if(dep_first_name.getText().isEmpty()) {
+						missingValues = missingValues +"\nMissing Dependent first name";
+					}
+
 			}
 
 			if(!minimumOneProject(selectedProjects,
