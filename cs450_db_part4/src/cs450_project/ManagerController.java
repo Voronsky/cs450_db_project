@@ -94,6 +94,9 @@ public class ManagerController {
 	private Button assignProject;
 	
 	@FXML
+	private Button resetAssign_btn;
+	
+	@FXML
 	private Button add_dep_btn;
 
 	CompanyDB company;
@@ -206,6 +209,17 @@ public class ManagerController {
 					alert.setContentText("No Project was Selected");
 					alert.showAndWait();
 				}
+			}
+		});
+		
+		/**
+		 * Clears the ArrayList of selectedProjects, thus having to choose new ones
+		 */
+		resetAssign_btn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				selectedProjects.clear();
+				output.setText("Assigned projects cleared");
 			}
 		});
 		
