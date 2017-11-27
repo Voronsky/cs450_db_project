@@ -34,18 +34,7 @@ public class CompanyDB {
 
 	
 	public CompanyDB() throws SQLException, IOException {
-		//this.pass = ;
-		//this.username = dbUsername;
-		
-		/*
-		try {
-			Class.forName(DRIVERNAME);
-		}catch(ClassNotFoundException x) {
-			System.out.println("Driver could not be loaded");
-		}
-		
-		this.conn = DriverManager.getConnection(DBINFO, DBUSERNAME,DBPASSW);
-		*/
+
 	}
 	
 	public void initiateConnection() throws SQLException, IOException {
@@ -247,6 +236,13 @@ public class CompanyDB {
 		return e;
 	}
 	
+	/**
+	 * Get the Projects associated to the employee from the database
+	 * @param e - Employee object
+	 * @return ArrayList<Pair> type, an ArrayList of pairs
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public ArrayList<Pair> getEmployeeProjects(Employee e) throws SQLException, IOException {
 		ArrayList<Pair> list = new ArrayList<Pair>();
 		ArrayList<BigDecimal> pnos  = new ArrayList<BigDecimal>();
@@ -258,7 +254,6 @@ public class CompanyDB {
 		p.setString(1, e.getSSN());
 		r = p.executeQuery();
 		while(r.next()) {
-			//pnos.add(r.getBigDecimal((1)));
 			Pair pair = new Pair();
 			pair.setProjectPno(r.getBigDecimal(1));
 			pair.setHours(r.getBigDecimal(2).doubleValue());
@@ -325,17 +320,7 @@ public class CompanyDB {
 	public void insertIntoEmployeeTable(Employee e) throws IOException {
 		System.out.println("ENTER EMPLOYEE TABLE INSERT");
 		e.printDebugEmployeeeInfo();
-		/*Connection c = null;
-		try {
-			Class.forName(DRIVERNAME);
-		}catch(ClassNotFoundException x) {
-			System.out.println("Driver could not be loaded");
-		}
-		try {
-			c = DriverManager.getConnection(DBINFO,DBUSERNAME,DBPASSW);
-		}catch(SQLException se) {
-			se.printStackTrace();
-		}*/
+		
 		BigDecimal numberSalary = new BigDecimal(e.getSalary());
 		BigDecimal numberDeptNum = new BigDecimal(e.getDepartmentNum());
 		java.sql.Date sqlDate = null;
@@ -362,7 +347,6 @@ public class CompanyDB {
 			p.setString(2, e.getMinit());
 			p.setString(3, e.getLastName());
 			p.setString(4, e.getSSN());
-			//p.setDate(5, sqlDate); //birthdate
 			p.setDate(5, sqlDate);
 			p.setString(6, e.getAddress());
 			p.setString(7, e.getSex());
