@@ -47,14 +47,15 @@ public class GUIController {
 					if(result == false) {
 						//System.exit(1);
 						db_output.setText("Manager SSN not recognized in Database");
-					}
-					root = FXMLLoader.load(getClass().getClassLoader().getResource("ManagerScreen.fxml"));
-					System.out.println(root);
-					Stage stage = new Stage();
-					stage.setTitle("Manager Screen");
-					stage.setScene(new Scene(root, 800, 600));
+					} else {
+						root = FXMLLoader.load(getClass().getClassLoader().getResource("ManagerScreen.fxml"));
+						System.out.println(root);
+						Stage stage = new Stage();
+						stage.setTitle("Manager Screen");
+						stage.setScene(new Scene(root, 800, 600));
 					
-					stage.show();
+						stage.show();
+					}
 				}
 				catch(Exception e) {
 					e.printStackTrace();

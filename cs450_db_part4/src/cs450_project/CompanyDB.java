@@ -54,7 +54,7 @@ public class CompanyDB {
 	 * @throws SQLException
 	 */
 	public boolean isManager(String ssn) throws SQLException {
-		String query = "select * from department where mgrssn = ?";
+		String query = "select dname from department where mgrssn = ?";
 		String mgrSsn = "";
 		try {
 			initiateConnection();
@@ -75,6 +75,7 @@ public class CompanyDB {
 		conn.close();
 		r.close();
 		p.close();
+		if(mgrSsn.length() == 0 || mgrSsn.isEmpty()) return false;
 		return true;
 		
 	}

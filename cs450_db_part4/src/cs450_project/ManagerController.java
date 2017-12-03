@@ -350,10 +350,12 @@ public class ManagerController {
 			}
 			
 			if(!dep_yes.isSelected() && !dep_no.isSelected()
-					|| dep_yes.isSelected() && dep_no.isSelected()) {
+					|| dep_yes.isSelected() && dep_no.isSelected()) 
+			{
 				missingValues = missingValues + "\nIndicate has Dependents or not";
 			}
-			if(dep_yes.isSelected() && dep_bdate.getText().length() != 8 ) {
+			
+			/*if(dep_yes.isSelected() && dep_bdate.getText().length() != 8 ) {
 						missingValues = missingValues + "\nDependet date format, dd-mm-yy";
 			}
 			if(dep_yes.isSelected() && dep_relationship.getText().isEmpty()) {
@@ -361,7 +363,7 @@ public class ManagerController {
 			}
 			if(dep_yes.isSelected() && dep_first_name.getText().isEmpty()) {
 				missingValues = missingValues +"\nMissing Dependent first name";
-			}
+			}*/
 
 			if(selectedProjects.size() == 0) {
 				missingValues = missingValues +"\nPlease assign at least 1 project";
@@ -379,6 +381,7 @@ public class ManagerController {
 			}*/
 			
 			if(missingValues.length()>0) {
+				alert.setHeaderText("Missing fields");
 				alert.setContentText(missingValues);
 				alert.showAndWait();
 				missingValues ="";
