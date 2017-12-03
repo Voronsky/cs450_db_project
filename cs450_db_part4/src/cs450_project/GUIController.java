@@ -43,8 +43,10 @@ public class GUIController {
 					System.out.println("-----INFO: Launching MgrScreen ----");
 					ssn = ssn_input.getText();
 					result = getSSNInput(ssn);
+					System.out.println(result);
 					if(result == false) {
-						System.exit(1);
+						//System.exit(1);
+						db_output.setText("Manager SSN not recognized in Database");
 					}
 					root = FXMLLoader.load(getClass().getClassLoader().getResource("ManagerScreen.fxml"));
 					System.out.println(root);

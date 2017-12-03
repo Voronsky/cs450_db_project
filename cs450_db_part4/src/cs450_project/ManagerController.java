@@ -542,7 +542,8 @@ public class ManagerController {
 					+ "Birth Date: " + e.getBirthDate()+"\n"
 					+ "Sex: " + e.getSex() +"\n"
 					+ "Department Number: "+e.getDepartmentNum()+"\n";
-			result = result + "----Projects Assigned----\n";
+			result = result + "----Projects Assigned----\n"
+					+"Project Name\tHours";
 			projs = company.getEmployeeProjects(e);
 			for(int i=0; i<projs.size();i++) {
 				result = result + projs.get(i).getProject()+"\t"+projs.get(i).getHours()
